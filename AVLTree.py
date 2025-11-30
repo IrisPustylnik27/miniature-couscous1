@@ -1,6 +1,6 @@
-#id1:
-#name1:
-#username1:
+#id1:[REDACTED_ID]
+#name1:iris [REDACTED_USERNAME]
+#username1:[REDACTED_USERNAME]
 #id2:
 #name2:
 #username2:
@@ -43,7 +43,9 @@ class AVLTree(object):
 	"""
 	Constructor, you are allowed to add more fields.
 	"""
+	# add a size for the whole tree, need to update ++ in insert for every insert
 	def __init__(self):
+		self.size = None 
 		self.root = None
 
 
@@ -163,8 +165,9 @@ class AVLTree(object):
 	@rtype: int
 	@returns: the number of items in dictionary 
 	"""
+	# returns the val itself (getter)
 	def size(self):
-		return -1	
+		return self.size	
 
 
 	"""returns the root of the tree representing the dictionary
@@ -172,5 +175,6 @@ class AVLTree(object):
 	@rtype: AVLNode
 	@returns: the root, None if the dictionary is empty
 	"""
+	# return the root that is in init(getter)
 	def get_root(self):
-		return None
+		return self.root
