@@ -44,9 +44,11 @@ class AVLTree(object):
 	Constructor, you are allowed to add more fields.
 	"""
 	# add a size for the whole tree, need to update ++ in insert for every insert
+	# add external leaf for simple use
 	def __init__(self):
 		self.size = None 
 		self.root = None
+		self.exLeaf = AVLNode(None, None)
 
 
 	"""searches for a node in the dictionary corresponding to the key (starting at the root)
