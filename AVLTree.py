@@ -186,19 +186,4 @@ class AVLTree(object):
 	def get_root(self):
 		return self.root
  
-	def rotation(self,nodeB,dirc):
-    	if dirc == "r":
-            nodeA = nodeB.left
-            nodeB.left.parent = nodeB
-            nodeA.right = nodeB
-			if nodeB.parent is None:
-				self.root = nodeA
-			elif nodeB == nodeB.parent.right :
-				nodeB.parent.right = nodeA
-			else:
-				nodeB.parent.left = nodeA
-			nodeA.right = nodeB
-			nodeB.parent = nodeA
-            
-        else:
-            nodeA = nodeB.right
+	
