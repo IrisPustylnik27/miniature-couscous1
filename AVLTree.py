@@ -1,9 +1,9 @@
 #id1:[REDACTED_ID]
 #name1:iris [REDACTED_USERNAME]
 #username1:[REDACTED_USERNAME]
-#id2:
-#name2:
-#username2:
+#id2: [REDACTED_ID]
+#name2: ksenia yaremenko
+#username2: [REDACTED_USERNAME]
 
 
 """A class represnting a node in an AVL tree"""
