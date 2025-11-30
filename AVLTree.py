@@ -4,8 +4,6 @@
 #id2: [REDACTED_ID]
 #name2: ksenia yaremenko
 #username2: [REDACTED_USERNAME]
-
-#hello world
 """A class represnting a node in an AVL tree"""
 
 class AVLNode(object):
@@ -151,8 +149,15 @@ class AVLTree(object):
 	@returns: a sorted list according to key of touples (key, value) representing the data structure
 	"""
 	def avl_to_array(self):
-		return None
+		avl_array = []
+		self.in_order(self.root, avl_array)
+		return avl_array
 
+	def in_order(self, curr_node, avl_array):
+		self.in_order(curr_node.left, avl_array)
+		avl_array.append(curr_node)
+		self.in_order(curr_node.right, avl_array)
+		return 0
 
 	"""returns the node with the maximal key in the dictionary
 
@@ -180,3 +185,5 @@ class AVLTree(object):
 	# return the root that is in init(getter)
 	def get_root(self):
 		return self.root
+
+
