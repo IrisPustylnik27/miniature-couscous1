@@ -58,6 +58,16 @@ class AVLTree(object):
     and e is the number of edges on the path between the starting node and ending node+1.
     """
     def search(self, key):
+        curr_node = self.root
+        e = -1
+        while curr_node is not None:
+            if curr_node.key == key:
+                return curr_node, e
+            elif curr_node < key:
+                curr_node = curr_node.right
+            else:
+                curr_node = curr_node.left
+            e+=1
         return None, -1
 
 
