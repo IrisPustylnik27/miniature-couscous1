@@ -201,7 +201,7 @@ class AVLTree(object):
     
     #rotation func. insert a node you want to rotate and in which dir
     def rotation(self,nodeB,dirc):
-        # 1 is right, else is left
+        # 1 is right, -1 is left
         if dirc == 1:
             nodeA = nodeB.left
             if nodeA is None : return
@@ -234,9 +234,43 @@ class AVLTree(object):
             nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
 
-    def balance_AVLtree(self, node, type):
+    def balance_AVLtree(self, node, dtype):
         # 1 for insert, -1 for delete
-
+        BFy = self.balance_factor(node)
+        if node.right is None and node.left is None: self.balance_AVLtree(node.parent, dtype)
+        else:
+            currHeight = 1 + max(node.right.height, node.left.height)
+            if abs(BFy) < 2 and node.height == currHeight: return
+            if abs(BFy) < 2 and node.height != currHeight: self.balance_AVLtree(node.parent, dtype)
+            else:
+                bfRightSon = self.balance_factor(node.right)
+                bfLeftSon = self.balance_factor(node.left)
+                if dtype == 1: 
+                    #insert
+                    if BFy == 2 :
+                        if bfLeftSon == 1: self.rotation(node,1)
+                        else:
+                            self.rotation(node,-1)
+                            self.rotation(node,1)
+                    else:
+                        if bfRightSon == -1: self.rotation(node,-1)
+                        else:
+                            self.rotation(node,1)
+                            self.rotation(node,-1)
+                else:
+                    #delete
+                    if BFy == 2 :
+                        if bfLeftSon == 1 or bfLeftSon == 0: self.rotation(node,1)
+                        else:
+                            self.rotation(node,-1)
+                            self.rotation(node,1)
+                    else:
+                        if bfRightSon == -1 or bfRightSon == 0: self.rotation(node,-1)
+                        else:
+                            self.rotation(node,1)
+                            self.rotation(node,-1)
+                    self.balance_AVLtree(node.parent, dtype)
+        return
     
     #balance factor of a node
     def balance_factor(self,node):
