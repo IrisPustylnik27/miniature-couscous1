@@ -232,6 +232,11 @@ class AVLTree(object):
                 nodeB.parent.right = nodeA
             nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
+    
+    #balance factor of a node
+    def balance_factor(node):
+        return node.left.height - node.right.height
+
 
 
     
