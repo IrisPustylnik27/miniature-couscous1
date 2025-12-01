@@ -201,7 +201,8 @@ class AVLTree(object):
     
     #rotation func. insert a node you want to rotate and in which dir
     def rotation(self,nodeB,dirc):
-        if dirc == "r":
+        # 1 is right, else is left
+        if dirc == 1:
             nodeA = nodeB.left
             if nodeA is None : return
             nodeB.left = nodeA.right
@@ -232,6 +233,10 @@ class AVLTree(object):
                 nodeB.parent.right = nodeA
             nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
+
+    def balance_AVLtree(self, node, type):
+        # 1 for insert, -1 for delete
+
     
     #balance factor of a node
     def balance_factor(self,node):
