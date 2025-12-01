@@ -198,11 +198,15 @@ class AVLTree(object):
     # return the root that is in init(getter)
     def get_root(self):
         return self.root
-
+    
+    #rotation func. insert a node you want to rotate and in which dir
     def rotation(self,nodeB,dirc):
         if dirc == "r":
             nodeA = nodeB.left
-            nodeB.left.parent = nodeB
+            if nodeA is None : return
+            nodeB.left = nodeA.right
+            if nodeB.left is not None:
+                nodeB.left.parent = nodeB
             nodeA.right = nodeB
             if nodeB.parent is None:
                 self.root = nodeA
@@ -210,11 +214,25 @@ class AVLTree(object):
                 nodeB.parent.right = nodeA
             else:
                 nodeB.parent.left = nodeA
-            nodeA.right = nodeB
+            nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
-            
+        #אין כמו שכפול קוד:)
         else:
             nodeA = nodeB.right
+            if nodeA is None : return
+            nodeB.right = nodeA.left
+            if nodeB.right is not None:
+                nodeB.right.parent = nodeB
+            nodeA.left = nodeB
+            if nodeB.parent is None:
+                self.root = nodeA
+            elif nodeB == nodeB.parent.left :
+                nodeB.parent.left = nodeA
+            else:
+                nodeB.parent.right = nodeA
+            nodeA.parent = nodeB.parent
+            nodeB.parent = nodeA
+
 
     
 
