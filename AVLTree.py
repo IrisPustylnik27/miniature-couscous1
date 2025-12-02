@@ -186,6 +186,7 @@ class AVLTree(object):
     @returns: the number of items in dictionary 
     """
     # returns the val itself (getter)
+    # time complexity of O(1)
     def size(self):
         return self.size
 
@@ -196,6 +197,7 @@ class AVLTree(object):
     @returns: the root, None if the dictionary is empty
     """
     # return the root that is in init(getter)
+    # time complexity of O(1)
     def get_root(self):
         return self.root
     
@@ -237,6 +239,8 @@ class AVLTree(object):
         nodeB.height = 1 + max(self.get_height(nodeB.left), self.get_height(nodeB.right))
         nodeA.height = 1 + max(self.get_height(nodeA.left), self.get_height(nodeA.right))
 
+
+    # time complexity of O(logn)
     def balance_AVLtree(self, node, dtype):
         # 1 for insert, -1 for delete
         if node is None : return
@@ -278,17 +282,20 @@ class AVLTree(object):
         return
     
     #balance factor of a node
+    # time complexity of O(1)
     def balance_factor(self,node):
         if node is None: return 0
         return self.get_height(node.left) - self.get_height(node.right)
     
     #getter for height
+    # time complexity of O(1)
     def get_height(self, node):
         if not node:
             return -1
         return node.height
     
     #helper to update height
+    # time complexity of O(1)
     def update_height(self, node):
         node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
 
