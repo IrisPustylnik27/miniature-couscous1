@@ -233,54 +233,59 @@ class AVLTree(object):
                 nodeB.parent.right = nodeA
             nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
+        #update the height after rotation
+        nodeB.height = 1 + max(self.get_height(nodeB.left), self.get_height(nodeB.right))
+        nodeA.height = 1 + max(self.get_height(nodeA.left), self.get_height(nodeA.right))
 
     def balance_AVLtree(self, node, dtype):
         # 1 for insert, -1 for delete
+        if node is None : return
         BFy = self.balance_factor(node)
-        if node.right is None and node.left is None: self.balance_AVLtree(node.parent, dtype)
+        currHeight = 1 + max(self.get_height(node.left), self.get_height(node.right))
+        heightChanged = (node.height != currHeight)
+        node.height = currHeight
+        if abs(BFy) < 2 : 
+            if not heightChanged: return
+            self.balance_AVLtree(node.parent, dtype)
         else:
-            currHeight = 1 + max(node.right.height, node.left.height)
-            if abs(BFy) < 2 and node.height == currHeight: return
-            if abs(BFy) < 2 and node.height != currHeight: self.balance_AVLtree(node.parent, dtype)
-            else:
-                bfRightSon = self.balance_factor(node.right)
-                bfLeftSon = self.balance_factor(node.left)
-                if dtype == 1: 
-                    #insert
-                    if BFy == 2 :
-                        if bfLeftSon == 1: self.rotation(node,1)
-                        else:
-                            self.rotation(node,-1)
-                            self.rotation(node,1)
+            bfRightSon = self.balance_factor(node.right)
+            bfLeftSon = self.balance_factor(node.left)
+            if dtype == 1: 
+                #insert
+                if BFy == 2 :
+                    if bfLeftSon == 1: self.rotation(node,1)
                     else:
-                        if bfRightSon == -1: self.rotation(node,-1)
-                        else:
-                            self.rotation(node,1)
-                            self.rotation(node,-1)
+                        self.rotation(node.left,-1)
+                        self.rotation(node,1)
                 else:
-                    #delete
-                    if BFy == 2 :
-                        if bfLeftSon == 1 or bfLeftSon == 0: self.rotation(node,1)
-                        else:
-                            self.rotation(node,-1)
-                            self.rotation(node,1)
+                    if bfRightSon == -1: self.rotation(node,-1)
                     else:
-                        if bfRightSon == -1 or bfRightSon == 0: self.rotation(node,-1)
-                        else:
-                            self.rotation(node,1)
-                            self.rotation(node,-1)
-                    self.balance_AVLtree(node.parent, dtype)
+                        self.rotation(node.right,1)
+                        self.rotation(node,-1)
+            else:
+                #delete
+                if BFy == 2 :
+                    if bfLeftSon >= 0: self.rotation(node,1)
+                    else:
+                        self.rotation(node.left,-1)
+                        self.rotation(node,1)
+                else:
+                    if bfRightSon <= 0: self.rotation(node,-1)
+                    else:
+                        self.rotation(node.right,1)
+                        self.rotation(node,-1)
+                if node.parent: self.balance_AVLtree(node.parent, dtype)
         return
     
     #balance factor of a node
     def balance_factor(self,node):
-        if node is None: return 7
-        return node.left.height - node.right.height
+        if node is None: return 0
+        return self.get_height(node.left) - self.get_height(node.right)
     
     #getter for height
     def get_height(self, node):
         if not node:
-            return 0
+            return -1
         return node.height
     
     #helper to update height
