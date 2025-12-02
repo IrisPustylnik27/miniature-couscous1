@@ -276,6 +276,17 @@ class AVLTree(object):
     def balance_factor(self,node):
         if node is None: return 7
         return node.left.height - node.right.height
+    
+    #getter for height
+    def get_height(self, node):
+        if not node:
+            return 0
+        return node.height
+    
+    #helper to update height
+    def update_height(self, node):
+        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
+
 
 
 
