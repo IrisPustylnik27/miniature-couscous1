@@ -60,7 +60,9 @@ class AVLTree(object):
 
     #does it need to be 1 when we searched for key in root?
     def search(self, key):
-        currNode = self.root
+        return self.down_search(self.root, key)
+
+    def down_search(self, currNode, key):
         e = -1
         while currNode is not None:
             if currNode.key == key:
@@ -69,7 +71,7 @@ class AVLTree(object):
                 currNode = currNode.right
             else:
                 currNode = currNode.left
-            e+=1
+            e += 1
         return None, -1
 
 
@@ -82,7 +84,11 @@ class AVLTree(object):
     and e is the number of edges on the path between the starting node and ending node+1.
     """
     def finger_search(self, key):
-        return None, -1
+        currNode = self.max_node()
+        if currNode.key < key: return None
+        while currNode.key > key:
+            currNode = currNode.parent
+        return self.down_search(currNode, key)
 
 
     """inserts a new node into the dictionary with corresponding key and value (starting at the root)
