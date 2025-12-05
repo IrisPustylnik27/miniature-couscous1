@@ -4,7 +4,7 @@
 #id2: [REDACTED_ID]
 #name2: ksenia yaremenko
 #username2: [REDACTED_USERNAME]
-"""A class represnting a node in an AVL tree"""
+"""A class representing a node in an AVL tree"""
 
 class AVLNode(object):
     """Constructor, you are allowed to add more fields.
@@ -57,16 +57,18 @@ class AVLTree(object):
     @returns: a tuple (x,e) where x is the node corresponding to key (or None if not found),
     and e is the number of edges on the path between the starting node and ending node+1.
     """
+
+    #does it need to be 1 when we searched for key in root?
     def search(self, key):
-        curr_node = self.root
+        currNode = self.root
         e = -1
-        while curr_node is not None:
-            if curr_node.key == key:
-                return curr_node, e
-            elif curr_node < key:
-                curr_node = curr_node.right
+        while currNode is not None:
+            if currNode.key == key:
+                return currNode, e
+            elif currNode < key:
+                currNode = currNode.right
             else:
-                curr_node = curr_node.left
+                currNode = currNode.left
             e+=1
         return None, -1
 
@@ -156,17 +158,17 @@ class AVLTree(object):
     """returns an array representing dictionary 
 
     @rtype: list
-    @returns: a sorted list according to key of touples (key, value) representing the data structure
+    @returns: a sorted list according to key of tuples (key, value) representing the data structure
     """
     def avl_to_array(self):
-        avl_array = []
-        self.in_order(self.root, avl_array)
-        return avl_array
+        avlArray = []
+        self.in_order(self.root, avlArray)
+        return avlArray
 
-    def in_order(self, curr_node, avl_array):
-        self.in_order(curr_node.left, avl_array)
-        avl_array.append(curr_node)
-        self.in_order(curr_node.right, avl_array)
+    def in_order(self, currNode, avlArray):
+        self.in_order(currNode.left, avlArray)
+        avlArray.append(currNode)
+        self.in_order(currNode.right, avlArray)
         return 0
 
     """returns the node with the maximal key in the dictionary
@@ -175,10 +177,10 @@ class AVLTree(object):
     @returns: the maximal node, None if the dictionary is empty
     """
     def max_node(self):
-        curr_node = self.root
-        while curr_node.right.key is not None:
-            curr_node = curr_node.right
-        return curr_node
+        currNode = self.root
+        while currNode.right.key is not None:
+            currNode = currNode.right
+        return currNode
 
     """returns the number of items in dictionary 
 
@@ -241,17 +243,18 @@ class AVLTree(object):
 
 
     # time complexity of O(logn)
-    def balance_AVLtree(self, node, dtype):
+    def balance_AVLtree(self, node, dtype, promoteCases):
         # 1 for insert, -1 for delete
         if node is None : return
         BFy = self.balance_factor(node)
         currHeight = 1 + max(self.get_height(node.left), self.get_height(node.right))
         heightChanged = (node.height != currHeight)
         node.height = currHeight
-        if abs(BFy) < 2 : 
-            if not heightChanged: return
-            self.balance_AVLtree(node.parent, dtype)
+        if abs(BFy) < 2 :
+            if (not heightChanged) and (dtype == 1): return
+            self.balance_AVLtree(node.parent, dtype, promoteCases)
         else:
+            promoteCases += 1
             bfRightSon = self.balance_factor(node.right)
             bfLeftSon = self.balance_factor(node.left)
             if dtype == 1: 
@@ -278,8 +281,8 @@ class AVLTree(object):
                     else:
                         self.rotation(node.right,1)
                         self.rotation(node,-1)
-                if node.parent: self.balance_AVLtree(node.parent, dtype)
-        return
+                if node.parent: self.balance_AVLtree(node.parent, dtype, promoteCases)
+        return promoteCases
     
     #balance factor of a node
     # time complexity of O(1)
