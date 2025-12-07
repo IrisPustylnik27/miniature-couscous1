@@ -297,7 +297,7 @@ class AVLTree(object):
         if node is None: return 0
         return self.get_height(node.left) - self.get_height(node.right)
     
-    
+
     #getter for height
     # time complexity of O(1)
     def get_height(self, node):
@@ -313,19 +313,19 @@ class AVLTree(object):
 
 
     #helper for finding the successor
-    #time complexity of O(1+logn)
+    #time complexity of O(logn)
     def successor(self,node):
         if node.right is not None:
-            return self.min(node)
+            return self.min(node.right)
         y = node.parent
-        while y is not None and x == y.right:
+        while y is not None and node == y.right:
             node = y
             y = node.parent
         return y
     
 
     #helper to find the minimum
-    #time complexity of O(1+logn)
+    #time complexity of O(logn)
     def min(self,node):
         while node.left is not None:
             node = node.left
