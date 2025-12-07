@@ -130,6 +130,37 @@ class AVLTree(object):
     @pre: node is a real pointer to a node in self
     """
     def delete(self, node):
+        if node is None:
+            return 
+        
+        parent = node. parent
+        # normal BSTs deletion
+        #case 1: no leaf
+        if node.left is None and node.right is None:
+            if parent is None: self.root = None
+            elif parent.left == node: parent.left = None
+            else: parent.right = None
+        
+        #case 2: 1 leaf
+        elif node.left is None or node.right is None:
+            child = node.left if node.left else node.right
+            child.parent = parent
+            if parent is None: self.root = child
+            elif parent.left == node: parent.left = child
+            else: parent.right = child
+        
+        #case 3: 2 leaf
+        else: 
+            succ = self.successor(node)
+            node.value = succ.value
+            self.delete(succ)
+            return
+        
+        #now AVL addition
+        while parent:
+            self.balance_AVLtree(parent,-1)
+            parent = parent
+
         return
 
 
