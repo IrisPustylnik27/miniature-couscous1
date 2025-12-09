@@ -283,7 +283,8 @@ class AVLTree(object):
     """
     def max_node(self):
         currNode = self.root
-        while currNode.right.key is not None:
+        if currNode is None: return None
+        while currNode.right is not None:
             currNode = currNode.right
         return currNode
 
