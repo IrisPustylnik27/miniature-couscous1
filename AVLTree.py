@@ -49,6 +49,12 @@ class AVLTree(object):
         self.root = None
         self.exLeaf = AVLNode(None, None)
 
+    #creating new node with height 0 for not repeating the code
+    def new_node(self, key, value):
+        newNode = AVLNode(key, value)
+        newNode.height = 0
+        return newNode
+
 
     """searches for a node in the dictionary corresponding to the key (starting at the root)
         
@@ -64,11 +70,12 @@ class AVLTree(object):
         return self.down_search(self.root, key)
 
     def down_search(self, currNode, key):
-        e = -1
+        if currNode is None: return None, -1
+        e = 1
         while currNode is not None:
             if currNode.key == key:
                 return currNode, e
-            elif currNode < key:
+            elif currNode.key < key:
                 currNode = currNode.right
             else:
                 currNode = currNode.left
@@ -85,11 +92,15 @@ class AVLTree(object):
     and e is the number of edges on the path between the starting node and ending node+1.
     """
     def finger_search(self, key):
+        e1 = 1
         currNode = self.max_node()
+        if currNode is None: return None, -1
         if currNode.key < key: return None
         while currNode.key > key:
             currNode = currNode.parent
-        return self.down_search(currNode, key)
+            e1 += 1
+        node, e2 = self.down_search(currNode, key)
+        return node, e1+e2-1
 
 
     """inserts a new node into the dictionary with corresponding key and value (starting at the root)
@@ -105,7 +116,16 @@ class AVLTree(object):
     and h is the number of PROMOTE cases during the AVL rebalancing
     """
     def insert(self, key, val):
-        return None, -1, -1
+        x = self.root
+        y, h = self.searching_for_insert(x, key)
+        newNode = self.new_node(key, val)
+        self.inserting_node(y, newNode)
+
+        promoteCases = 0
+        if y is not None:
+            promoteCases = self.balance_AVLtree(y, 1, promoteCases)
+
+        return newNode, h, promoteCases
 
 
     """inserts a new node into the dictionary with corresponding key and value, starting at the max
@@ -121,7 +141,54 @@ class AVLTree(object):
     and h is the number of PROMOTE cases during the AVL rebalancing
     """
     def finger_insert(self, key, val):
-        return None, -1, -1
+        x = self.max_node()
+        newNode = self.new_node(key, val)
+        if x is None:
+            self.inserting_node(None, newNode)
+            return newNode, 0, 0
+        edgesUp = 0
+        edgesDown = 0
+        if x.key < key:
+            self.inserting_node(x, newNode)
+            y = x
+            edgesDown += 1
+        else:
+            while x.key > key:
+                if x.parent is None: break
+                x = x.parent
+                edgesUp += 1
+            y, edgesDown = self.searching_for_insert(x, key)
+            self.inserting_node(y, newNode)
+
+        promoteCases = 0
+        if y is not None:
+            promoteCases = self.balance_AVLtree(y, 1, promoteCases)
+
+        return newNode, edgesUp+edgesDown, promoteCases
+
+
+    def searching_for_insert(self, x, key):
+        y = None
+        h = 0
+        while x is not None:
+            y = x
+            if key < x.key:
+                x = x.left
+            else:
+                x = x.right
+            h += 1
+        return y, h
+
+
+    def inserting_node(self, par, node):
+        if par is None:
+            self.root = node
+        elif node.key < par.key:
+            par.left = node
+        else:
+            par.right = node
+        node.parent = par
+        return
 
 
     """deletes node from the dictionary
