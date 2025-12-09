@@ -131,14 +131,14 @@ class AVLTree(object):
     """
     def delete(self, node):
         if node is None:
-            return 
+            return
         
-        parent = node. parent
+        parent = node.parent
         # normal BSTs deletion
         #case 1: no leaf
         if node.left is None and node.right is None:
             if parent is None: self.root = None
-            elif parent.left == node: parent.left = None
+            elif parent.left is node: parent.left = None
             else: parent.right = None
         
         #case 2: 1 leaf
@@ -146,20 +146,20 @@ class AVLTree(object):
             child = node.left if node.left else node.right
             child.parent = parent
             if parent is None: self.root = child
-            elif parent.left == node: parent.left = child
+            elif parent.left is node: parent.left = child
             else: parent.right = child
         
         #case 3: 2 leaf
         else: 
             succ = self.successor(node)
             node.value = succ.value
+            node.key = succ.key
             self.delete(succ)
             return
         
         #now AVL addition
-        while parent:
+        if parent is not None:
             self.balance_AVLtree(parent,-1)
-            parent = parent
 
         return
 
@@ -282,44 +282,48 @@ class AVLTree(object):
 
     # time complexity of O(logn)
     def balance_AVLtree(self, node, dtype, promoteCases):
-        # 1 for insert, -1 for delete
-        if node is None : return
+        # 1 for insert, -1 for delete, promoteCases is how many times we needed to rebalance (rotations cases)
+        if node is None : return promoteCases
+
         BFy = self.balance_factor(node)
+
         currHeight = 1 + max(self.get_height(node.left), self.get_height(node.right))
         heightChanged = (node.height != currHeight)
         node.height = currHeight
+
         if abs(BFy) < 2 :
-            if (not heightChanged) and (dtype == 1): return
-            self.balance_AVLtree(node.parent, dtype, promoteCases)
-        else:
-            promoteCases += 1
-            bfRightSon = self.balance_factor(node.right)
-            bfLeftSon = self.balance_factor(node.left)
-            if dtype == 1: 
-                #insert
-                if BFy == 2 :
-                    if bfLeftSon == 1: self.rotation(node,1)
-                    else:
-                        self.rotation(node.left,-1)
-                        self.rotation(node,1)
+            if (not heightChanged) and (dtype == 1): return promoteCases
+            return self.balance_AVLtree(node.parent, dtype, promoteCases)
+
+        promoteCases += 1
+
+        bfRightSon = self.balance_factor(node.right)
+        bfLeftSon = self.balance_factor(node.left)
+        if dtype == 1:
+            #insert
+            if BFy == 2 :
+                if bfLeftSon == 1: self.rotation(node,1)
                 else:
-                    if bfRightSon == -1: self.rotation(node,-1)
-                    else:
-                        self.rotation(node.right,1)
-                        self.rotation(node,-1)
+                    self.rotation(node.left,-1)
+                    self.rotation(node,1)
             else:
-                #delete
-                if BFy == 2 :
-                    if bfLeftSon >= 0: self.rotation(node,1)
-                    else:
-                        self.rotation(node.left,-1)
-                        self.rotation(node,1)
+                if bfRightSon == -1: self.rotation(node,-1)
                 else:
-                    if bfRightSon <= 0: self.rotation(node,-1)
-                    else:
-                        self.rotation(node.right,1)
-                        self.rotation(node,-1)
-                if node.parent: self.balance_AVLtree(node.parent, dtype, promoteCases)
+                    self.rotation(node.right,1)
+                    self.rotation(node,-1)
+        else:
+            #delete
+            if BFy == 2 :
+                if bfLeftSon >= 0: self.rotation(node,1)
+                else:
+                     self.rotation(node.left,-1)
+                     self.rotation(node,1)
+            else:
+                if bfRightSon <= 0: self.rotation(node,-1)
+                else:
+                    self.rotation(node.right,1)
+                    self.rotation(node,-1)
+            if node.parent: return self.balance_AVLtree(node.parent, dtype, promoteCases)
         return promoteCases
     
     #balance factor of a node
