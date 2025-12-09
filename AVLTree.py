@@ -95,8 +95,9 @@ class AVLTree(object):
         e1 = 1
         currNode = self.max_node()
         if currNode is None: return None, -1
-        if currNode.key < key: return None
+        if currNode.key < key: return None, -1
         while currNode.key > key:
+            if currNode.parent is None: break
             currNode = currNode.parent
             e1 += 1
         node, e2 = self.down_search(currNode, key)
