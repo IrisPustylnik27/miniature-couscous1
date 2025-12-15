@@ -245,8 +245,38 @@ class AVLTree(object):
     """
     def join(self, tree2, key, val):
         #check who's height is bigger
-        h1 = self.get_height(self.root)
-        h2 = tree2.get_height(tree2.root)
+        h1 = self.get_height(self.root) if self.root else -1
+        h2 = tree2.get_height(tree2.root) if tree2.root else -1
+        newSize = tree2.size + self.size + 1
+
+        if not self.root:
+            tree2.insert(key, val)
+            self.root = tree2.root
+            self.size = tree2.size
+            return
+
+        if not tree2.root:
+            self.insert(key, val)
+            return
+    
+        # if close by height
+        if abs(h1 - h2) <= 1:
+            new_root = AVLNode(key, val)
+            if self.root.key < key :
+                new_root.left = self.root
+                new_root.right = tree2.root
+            else:
+                new_root.right = self.root
+                new_root.left = tree2.root
+            if self.root: self.root.parent = new_root
+            if tree2.root: tree2.root.parent = new_root
+            
+            self.root = new_root
+            self.root.height = 1 + max(h1, h2)
+            self.size = newSize 
+            return 
+        
+        #else
         if h2 > h1 : 
             t2 = tree2
             t1 = self
@@ -256,31 +286,32 @@ class AVLTree(object):
         
         node = AVLNode(key,val)
         if t2.root.key > key:
-            b = t2.min(t2.root)
-            while(b.height < h1):
-                b = b.parent
+            b = t2.root
+            while(b.height > t1.get_height(t1.root) + 1):
+                b = b.left
             t1.root.parent = node
             c = b.parent
             b.parent =  node
             node.parent = c
-            c.left = node
+            if c is None: t2.root = node
+            else: c.left = node
             node.left = t1.root
             node.right = b
         else:
-            b = t2.max_node()
-            while b.height < h1:
-                b = b.parent
+            b = t2.root
+            while b.height > t1.get_height(t1.root) + 1:
+                b = b.right
             c = b.parent
             b.parent =  node
             node.parent = c
-            c.right = node
+            if c is None: t2.root = node
+            else: c.right = node
             node.right = t1.root
             node.left = b
-
+        node.height = 1 + max(node.left.height if node.left else -1, node.right.height if node.right else -1)
         t2.balance_AVLtree(c,-1,0)
-
         self.root = t2.root
-        self.size = t2.size()
+        self.size = newSize
         
         return
 
