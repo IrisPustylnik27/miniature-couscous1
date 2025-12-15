@@ -244,7 +244,7 @@ class AVLTree(object):
     or the opposite way
     """
     def join(self, tree2, key, val):
-        #check who is smaller then key
+        #check who's height is bigger
         h1 = self.get_height(self.root)
         h2 = tree2.get_height(tree2.root)
         if h2 > h1 : 
@@ -254,13 +254,11 @@ class AVLTree(object):
             t2 = self
             t1 = tree2
         
-        node = AVLNode(key,value)
+        node = AVLNode(key,val)
         if t2.root.key > key:
-            h = 0
             b = t2.min(t2.root)
-            while(h < h1):
+            while(b.height < h1):
                 b = b.parent
-                h += 1
             t1.root.parent = node
             c = b.parent
             b.parent =  node
@@ -269,11 +267,9 @@ class AVLTree(object):
             node.left = t1.root
             node.right = b
         else:
-            b = t2.max_node(t1.root)
-            h = 0
-            while h < h1:
+            b = t2.max_node()
+            while b.height < h1:
                 b = b.parent
-                h += 1
             c = b.parent
             b.parent =  node
             node.parent = c
@@ -282,11 +278,11 @@ class AVLTree(object):
             node.left = b
 
         t2.balance_AVLtree(c,-1,0)
-        tree = AVLTree()
-        tree.size = t2.size
-        tree.root = t2.root
+
+        self.root = t2.root
+        self.size = t2.size()
         
-        return tree
+        return
 
 
     """splits the dictionary at a given node
