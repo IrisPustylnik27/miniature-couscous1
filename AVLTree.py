@@ -121,6 +121,7 @@ class AVLTree(object):
         y, h = self.searching_for_insert(x, key)
         newNode = self.new_node(key, val)
         self.inserting_node(y, newNode)
+        self.size += 1
 
         promoteCases = 0
         if y is not None:
@@ -224,10 +225,12 @@ class AVLTree(object):
             node.key = succ.key
             self.delete(succ)
             return
+        self.size -= 1
         
         #now AVL addition
         if parent is not None:
             self.balance_AVLtree(parent,-1)
+
 
         return
 
@@ -248,7 +251,7 @@ class AVLTree(object):
         h1 = self.get_height(self.root) if self.root else -1
         h2 = tree2.get_height(tree2.root) if tree2.root else -1
         newSize = tree2.size + self.size + 1
-
+        #need to add check that none of the trees is None
         if not self.root:
             tree2.insert(key, val)
             self.root = tree2.root
