@@ -330,6 +330,50 @@ class AVLTree(object):
     dictionary larger than node.key.
     """
     def split(self, node):
+        #need to add size to all the trees
+        leftTree, rightTree = AVLTree(), AVLTree()
+        leftTree.root = node.left
+        if leftTree.root is not None: leftTree.root.parent = None
+        rightTree.root = node.right
+        if rightTree.root is not None: rightTree.root.parent = None
+        node.left, node.right = None, None
+
+        child = node
+        parent = node.parent
+        while parent is not None:
+            grand = parent.parent
+            t = AVLTree()
+            if child is parent.right:
+                t.root = parent.left
+                if t.root is not None: t.root.parent = None
+                parent.left = None
+                parent.right = None
+                parent.parent = None
+                leftTree.join(t, parent.key, parent.value)
+            else:
+                #child is parent left
+                t.root = parent.right
+                if t.root is not None: t.root.parent = None
+                parent.left = None
+                parent.right = None
+                parent.parent = None
+                #right = (right_tree) + parent + (t)
+                rightTree.join(t, parent.key, parent.value)
+            child = parent
+            parent = grand
+            if leftTree.root is not None:
+                leftTree.root.parent = None
+            if rightTree.root is not None:
+                rightTree.root.parent = None
+
+        return leftTree, rightTree
+
+
+
+
+
+
+
         return None, None
 
 
