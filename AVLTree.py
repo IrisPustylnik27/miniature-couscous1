@@ -45,7 +45,7 @@ class AVLTree(object):
     # add a size for the whole tree, need to update ++ in insert for every insert
     # add external leaf for simple use
     def __init__(self):
-        self.size = 0
+        self.sizeOfTree = 0
         self.root = None
         self.exLeaf = AVLNode(None, None)
 
@@ -121,7 +121,7 @@ class AVLTree(object):
         y, h = self.searching_for_insert(x, key)
         newNode = self.new_node(key, val)
         self.inserting_node(y, newNode)
-        self.size += 1
+        self.sizeOfTree += 1
         promoteCases = 0
         if y is not None:
             promoteCases = self.balance_AVLtree(y, 1, promoteCases)
@@ -224,11 +224,11 @@ class AVLTree(object):
             node.key = succ.key
             self.delete(succ)
             return
-        self.size -= 1
+        self.sizeOfTree -= 1
         
         #now AVL addition
         if parent is not None:
-            self.balance_AVLtree(parent,-1)
+            self.balance_AVLtree(parent,-1, 0)
 
 
         return
@@ -249,12 +249,12 @@ class AVLTree(object):
         #check who's height is bigger
         h1 = self.get_height(self.root) if self.root else -1
         h2 = tree2.get_height(tree2.root) if tree2.root else -1
-        newSize = tree2.size + self.size + 1
+        newSize = tree2.sizeOfTree + self.sizeOfTree + 1
         #need to add check that none of the trees is None
         if not self.root:
             tree2.insert(key, val)
             self.root = tree2.root
-            self.size = tree2.size
+            self.sizeOfTree = tree2.sizeOfTree
             return
 
         if not tree2.root:
@@ -275,7 +275,7 @@ class AVLTree(object):
             
             self.root = new_root
             self.root.height = 1 + max(h1, h2)
-            self.size = newSize 
+            self.sizeOfTree = newSize
             return 
         
         #else
@@ -313,7 +313,7 @@ class AVLTree(object):
         node.height = 1 + max(node.left.height if node.left else -1, node.right.height if node.right else -1)
         t2.balance_AVLtree(c,-1,0)
         self.root = t2.root
-        self.size = newSize
+        self.sizeOfTree = newSize
         
         return
 
@@ -410,7 +410,7 @@ class AVLTree(object):
     # returns the val itself (getter)
     # time complexity of O(1)
     def size(self):
-        return self.size
+        return self.sizeOfTree
 
 
     """returns the root of the tree representing the dictionary
