@@ -370,13 +370,6 @@ class AVLTree(object):
 
 
 
-
-
-
-
-        return None, None
-
-
     """returns an array representing dictionary 
 
     @rtype: list
