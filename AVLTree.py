@@ -352,9 +352,9 @@ class AVLTree(object):
                 if t.root is not None: t.root.parent = None
                 #right = (right_tree) + parent + (t)
                 rightTree.join(t, parent.key, parent.value)
-            self.detach_node(parent)
             child = parent
             parent = grand
+            self.detach_node(child)
             if leftTree.root is not None:
                 leftTree.root.parent = None
             if rightTree.root is not None:
