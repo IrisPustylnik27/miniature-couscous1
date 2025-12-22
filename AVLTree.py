@@ -45,7 +45,7 @@ class AVLTree(object):
     # add a size for the whole tree, need to update ++ in insert for every insert
     # add external leaf for simple use
     def __init__(self):
-        self.size = None
+        self.size = 0
         self.root = None
         self.exLeaf = AVLNode(None, None)
 
@@ -122,7 +122,6 @@ class AVLTree(object):
         newNode = self.new_node(key, val)
         self.inserting_node(y, newNode)
         self.size += 1
-
         promoteCases = 0
         if y is not None:
             promoteCases = self.balance_AVLtree(y, 1, promoteCases)
