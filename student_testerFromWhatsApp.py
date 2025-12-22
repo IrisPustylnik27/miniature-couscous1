@@ -8,6 +8,7 @@
 '''
 
 import unittest
+import NumPy as np
 from AVLTree import AVLTree, AVLNode
 
 # pylint: disable=C0115,C0116
