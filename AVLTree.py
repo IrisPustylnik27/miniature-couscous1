@@ -289,7 +289,7 @@ class AVLTree(object):
         node = AVLNode(key,val)
         if t2.root.key > key:
             b = t2.root
-            while(b.height > t1.get_height(t1.root) + 1):
+            while b.height > t1.get_height(t1.root) + 1:
                 b = b.left
             t1.root.parent = node
             c = b.parent
@@ -547,6 +547,7 @@ class AVLTree(object):
         while node.left is not None:
             node = node.left
         return node
+
 
 
 
