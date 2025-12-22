@@ -2,6 +2,9 @@ import random
 
 from AVLTree import AVLTree
 
+import random
+
+
 def generate_sorted(n):
     return list(range(n))
 
@@ -37,6 +40,15 @@ def run_single_experiment(arr):
     return total_edges, total_promotes
 
 
+def average_promotes(generator_func, n, runs=20):
+    total = 0.0
+    for _ in range(runs):
+        arr = generator_func(n)
+        _, promotes = run_single_experiment(arr)
+        total += promotes
+    return total / runs
+
+
 def main():
     print("i | n | sorted | reversed | random | almost_sorted")
     print("-" * 65)
@@ -44,38 +56,19 @@ def main():
     for i in range(1, 11):
         n = 300 * (2 ** i)
 
-        # 1. sorted
-        sorted_arr = generate_sorted(n)
-        _, promotes_sorted = run_single_experiment(sorted_arr)
-
-        # 2. reverse sorted
-        reversed_arr = generate_reverse_sorted(n)
-        _, promotes_reversed = run_single_experiment(reversed_arr)
-
-        # 3. random (avg of 20)
-        promotes_random_sum = 0
-        for _ in range(20):
-            arr = generate_random(n)
-            _, promotes = run_single_experiment(arr)
-            promotes_random_sum += promotes
-        promotes_random_avg = promotes_random_sum / 20.0
-
-        # 4. almost sorted (avg of 20)
-        promotes_almost_sum = 0
-        for _ in range(20):
-            arr = generate_almost_sorted(n)
-            _, promotes = run_single_experiment(arr)
-            promotes_almost_sum += promotes
-        promotes_almost_avg = promotes_almost_sum / 20.0
+        avg_sorted = average_promotes(generate_sorted, n)
+        avg_reversed = average_promotes(generate_reverse_sorted, n)
+        avg_random = average_promotes(generate_random, n)
+        avg_almost = average_promotes(generate_almost_sorted, n)
 
         print(
-            "{:2d} | {:5d} | {:6d} | {:8d} | {:6.1f} | {:6.1f}".format(
+            "{:2d} | {:5d} | {:6.1f} | {:8.1f} | {:6.1f} | {:6.1f}".format(
                 i,
                 n,
-                promotes_sorted,
-                promotes_reversed,
-                promotes_random_avg,
-                promotes_almost_avg,
+                avg_sorted,
+                avg_reversed,
+                avg_random,
+                avg_almost,
             )
         )
 
