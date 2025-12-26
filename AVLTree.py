@@ -137,6 +137,10 @@ class AVLTree(object):
         newNode = self.new_node(key, val)
         self.inserting_node(y, newNode)
         self.sizeOfTree += 1
+        currNode = newNode
+        while currNode.parent is not None:
+            currNode = currNode.parent
+            self.update_height(currNode)
         promoteCases = 0
         if y is not None:
             promoteCases = self.balance_AVLtree(y, 1, promoteCases)
@@ -178,6 +182,11 @@ class AVLTree(object):
             y, edgesDown = self.searching_for_insert(x, key)
             self.inserting_node(y, newNode)
 
+        currNode = newNode
+        while currNode.parent is not None:
+            currNode = currNode.parent
+            self.update_height(currNode)
+            
         promoteCases = 0
         if y is not None:
             promoteCases = self.balance_AVLtree(y, 1, promoteCases)
