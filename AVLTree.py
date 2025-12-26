@@ -298,9 +298,9 @@ class AVLTree(object):
         newSize = tree2.sizeOfTree + self.sizeOfTree + 1
         #need to add check that none of the trees is None
         if not self.root:
-            tree2.insert(key, val)
             self.root = tree2.root
             self.sizeOfTree = tree2.sizeOfTree
+            self.insert(key, val)
             return
 
         if not tree2.root:
@@ -357,7 +357,7 @@ class AVLTree(object):
             else: c.right = node
             node.right = t1.root
             node.left = b
-        node.height = 1 + max(node.left.height if node.left else -1, node.right.height if node.right else -1)
+        self.update_height(node)
         t2.balance_AVLtree(c,-1,0)
         self.root = t2.root
         self.sizeOfTree = newSize
@@ -523,8 +523,8 @@ class AVLTree(object):
             nodeA.parent = nodeB.parent
             nodeB.parent = nodeA
         #update the height after rotation
-        nodeB.height = 1 + max(self.get_height(nodeB.left), self.get_height(nodeB.right))
-        nodeA.height = 1 + max(self.get_height(nodeA.left), self.get_height(nodeA.right))
+        self.update_height(nodeB)
+        self.update_height(nodeA)
 
         return
 
